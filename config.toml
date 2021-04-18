@@ -1,7 +1,7 @@
 baseURL = "https://blog.kallydev.com"
 title = "Kally's Blog"
 theme = "book"
-languageCode = "zh-cn"
+languageCode = "zh"
 defaultContentLanguage = "zh"
 enableGitInfo = true
 googleAnalytics = "UA-138254822-2"
