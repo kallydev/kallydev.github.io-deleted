@@ -1,0 +1,1 @@
+'use strict';(function(){const a={encode:!1,tokenize:function(a){return a.replace(/[\x00-\x7F]/g,'').split('')}};a.doc={id:'id',field:['title','content'],store:['title','href','section']};const b=FlexSearch.create('balance',a);window.bookSearchIndex=b})()
