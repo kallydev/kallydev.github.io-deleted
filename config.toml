@@ -1,0 +1,22 @@
+baseURL = "https://blog.kallydev.com"
+title = "Kally's Blog"
+theme = "book"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh"
+enableGitInfo = true
+googleAnalytics = "UA-138254822-2"
+
+[languages]
+  [languages.zh]
+    languageName = "中文"
+    contentDir = "content.zh"
+    weight = 1
+
+[params]
+  BookTheme = "light"
+  BookToC = false
+  BookLogo = "https://proxy.kallydev.com/avatar/a40ee0036c23ff2c13fca74683109b4b"
+  BookRepo = "https://github.com/kallydev/kallydev.github.io"
+  BookPortableLinks = true
+  BookCommitPath = 'commit'
+  BookEditPath = 'edit/main'
