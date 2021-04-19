@@ -12,6 +12,12 @@ googleAnalytics = "UA-138254822-2"
     contentDir = "content.zh"
     weight = 1
 
+[menu]
+[[menu.after]]
+  name = "GitHub"
+  url = "https://github.com/kallydev"
+  weight = 1
+
 [params]
   BookTheme = "light"
   BookToC = false
