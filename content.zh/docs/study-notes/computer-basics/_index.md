@@ -1,5 +1,5 @@
 ---
-weight: 3
+weight: 6
 bookCollapseSection: true
 title: "计算机基础"
 ---
