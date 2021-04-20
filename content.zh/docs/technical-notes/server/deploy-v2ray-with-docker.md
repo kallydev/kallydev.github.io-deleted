@@ -248,7 +248,7 @@ sudo nano /opt/v2fly-core/config.json
 
 把以下配置粘贴到 `config.json` 文件内（自行修改 UUID）。
 
-```
+```json
 {
   "inbounds": [
     {
