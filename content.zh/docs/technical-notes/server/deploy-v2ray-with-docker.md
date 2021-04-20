@@ -10,7 +10,7 @@ title: "使用 Docker 部署 V2Ray"
 1. 服务器为腾讯云轻量应用服务器（香港或新加坡）；
 2. 服务器操作系统为 Ubuntu 20.04 LTS；
 3. 系统默认用户 ubuntu，非默认用户 zhangsan；
-4. 在海外服务商购买的域名（例如 GoDaddy、Google Domain）；
+4. 在海外服务商购买的域名（例如 GoDaddy、Google Domain），测试用例为 example.com；
 
 ## 部署步骤
 
