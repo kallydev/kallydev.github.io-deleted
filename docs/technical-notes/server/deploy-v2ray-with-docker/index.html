@@ -2,7 +2,7 @@
  服务器为腾讯云轻量应用服务器（香港或新加坡）； 服务器操作系统为 Ubuntu 20.04 LTS； 系统默认用户 ubuntu，非默认用户 zhangsan； 服务器 IP 为 42.42.42.42； 在海外服务商购买的域名（例如 GoDaddy、Google Domain）；  部署步骤 #  配置服务器 #   卸载腾讯云监控组件（非腾讯云轻量应用服务器请略过）。  sudo /usr/local/qcloud/stargate/admin/uninstall.sh sudo /usr/local/qcloud/YunJing/uninst.sh sudo /usr/local/qcloud/monitor/barad/admin/uninstall.sh 创建新的用户 zhangsan 并修改密码。  sudo useradd -s /bin/bash -d /home/zhangsan -m zhangsan sudo passwd zhangsan 配置 zhangsan 允许使用 sudo 命令。  sudo visudo 在文件最末尾找到以下内容：
 #includedir /etc/sudoers.d lighthouse ALL=(ALL) NOPASSWD: ALL ubuntu ALL=(ALL:ALL) NOPASSWD: ALL 将以上内容修改为以下内容："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="使用 Docker 部署 V2Ray"><meta property="og:description" content="使用 Docker 部署 V2Ray #  部署环境 #  仅用于参考，并非硬性要求，需按照实际情况自行更改。
  服务器为腾讯云轻量应用服务器（香港或新加坡）； 服务器操作系统为 Ubuntu 20.04 LTS； 系统默认用户 ubuntu，非默认用户 zhangsan； 服务器 IP 为 42.42.42.42； 在海外服务商购买的域名（例如 GoDaddy、Google Domain）；  部署步骤 #  配置服务器 #   卸载腾讯云监控组件（非腾讯云轻量应用服务器请略过）。  sudo /usr/local/qcloud/stargate/admin/uninstall.sh sudo /usr/local/qcloud/YunJing/uninst.sh sudo /usr/local/qcloud/monitor/barad/admin/uninstall.sh 创建新的用户 zhangsan 并修改密码。  sudo useradd -s /bin/bash -d /home/zhangsan -m zhangsan sudo passwd zhangsan 配置 zhangsan 允许使用 sudo 命令。  sudo visudo 在文件最末尾找到以下内容：
-#includedir /etc/sudoers.d lighthouse ALL=(ALL) NOPASSWD: ALL ubuntu ALL=(ALL:ALL) NOPASSWD: ALL 将以上内容修改为以下内容："><meta property="og:type" content="article"><meta property="og:url" content="https://blog.kallydev.com/docs/technical-notes/server/deploy-v2ray-with-docker/"><meta property="article:section" content="docs"><meta property="article:modified_time" content="2021-04-20T21:28:20+08:00"><title>使用 Docker 部署 V2Ray | Kally's Blog</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css integrity="sha256-K8I2SkpLMfDsHevs8Kj5CoQIIfFD3+Gsag98vL3PZKw="><script defer src=/zh.search.min.ded5b81696252ea84027ffb4b2fb5f767c2bb1bb8e9450dd6ceae4a62cee3d58.js integrity="sha256-3tW4FpYlLqhAJ/+0svtfdnwrsbuOlFDdbOrkpizuPVg="></script><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-138254822-2','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+#includedir /etc/sudoers.d lighthouse ALL=(ALL) NOPASSWD: ALL ubuntu ALL=(ALL:ALL) NOPASSWD: ALL 将以上内容修改为以下内容："><meta property="og:type" content="article"><meta property="og:url" content="https://blog.kallydev.com/docs/technical-notes/server/deploy-v2ray-with-docker/"><meta property="article:section" content="docs"><meta property="article:modified_time" content="2021-04-20T21:42:49+08:00"><title>使用 Docker 部署 V2Ray | Kally's Blog</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css integrity="sha256-K8I2SkpLMfDsHevs8Kj5CoQIIfFD3+Gsag98vL3PZKw="><script defer src=/zh.search.min.b5bd52ce6ecb4fee50e1ca8944bc138b3e01451d801098298e559b319fdf9d60.js integrity="sha256-tb1Szm7LT+5Q4cqJRLwTiz4BRR2AEJgpjlWbMZ/fnWA="></script><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-138254822-2','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a href=/><img src=https://proxy.kallydev.com/avatar/a40ee0036c23ff2c13fca74683109b4b alt=Logo><span>Kally's Blog</span></a></h2><div class=book-search><input type=text id=book-search-input placeholder=搜索 aria-label=搜索 maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><ul><li class=book-section-flat><a href=https://blog.kallydev.com/docs/study-notes/>学习笔记</a><ul><li><input type=checkbox id=section-853e7926f01d4450a9d99e1b3c4932e6 class=toggle>
 <label for=section-853e7926f01d4450a9d99e1b3c4932e6 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/further-mathematics/>高等数学</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-93578c9c4d2e36fc172ee1cad7e200e1 class=toggle>
@@ -126,41 +126,41 @@ sudo sysctl net.ipv4.tcp_available_congestion_control
 </code></pre></div><h3 id=编辑-v2ray-服务端配置>编辑 v2ray 服务端配置
 <a class=anchor href=#%e7%bc%96%e8%be%91-v2ray-%e6%9c%8d%e5%8a%a1%e7%ab%af%e9%85%8d%e7%bd%ae>#</a></h3><ol><li>创建目录以及 <code>config.json</code> 文件。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo mkdir -p /opt/v2fly-core
 sudo nano /opt/v2fly-core/config.json
-</code></pre></div><p>把以下配置粘贴到 <code>config.json</code> 文件内（自行修改 UUID）。</p><pre><code>{
-  &quot;inbounds&quot;: [
+</code></pre></div><p>把以下配置粘贴到 <code>config.json</code> 文件内（自行修改 UUID）。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;inbounds&#34;</span>: [
     {
-      &quot;port&quot;: 443,
-      &quot;protocol&quot;: &quot;vmess&quot;,
-      &quot;settings&quot;: {
-        &quot;clients&quot;: [
+      <span style=color:#f92672>&#34;port&#34;</span>: <span style=color:#ae81ff>443</span>,
+      <span style=color:#f92672>&#34;protocol&#34;</span>: <span style=color:#e6db74>&#34;vmess&#34;</span>,
+      <span style=color:#f92672>&#34;settings&#34;</span>: {
+        <span style=color:#f92672>&#34;clients&#34;</span>: [
           {
-            &quot;id&quot;: &quot;3DD78345-27F8-4B14-8C6E-7856A6C4FB8D&quot;,
-            &quot;alterId&quot;: 0
+            <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;3DD78345-27F8-4B14-8C6E-7856A6C4FB8D&#34;</span>,
+            <span style=color:#f92672>&#34;alterId&#34;</span>: <span style=color:#ae81ff>0</span>
           }
         ]
       },
-      &quot;streamSettings&quot;: {
-        &quot;network&quot;: &quot;tcp&quot;,
-        &quot;security&quot;: &quot;tls&quot;,
-        &quot;tlsSettings&quot;: {
-          &quot;certificates&quot;: [
+      <span style=color:#f92672>&#34;streamSettings&#34;</span>: {
+        <span style=color:#f92672>&#34;network&#34;</span>: <span style=color:#e6db74>&#34;tcp&#34;</span>,
+        <span style=color:#f92672>&#34;security&#34;</span>: <span style=color:#e6db74>&#34;tls&#34;</span>,
+        <span style=color:#f92672>&#34;tlsSettings&#34;</span>: {
+          <span style=color:#f92672>&#34;certificates&#34;</span>: [
             {
-              &quot;certificateFile&quot;: &quot;/etc/letsencrypt/live/example.com/fullchain.pem&quot;,
-              &quot;keyFile&quot;: &quot;/etc/letsencrypt/live/example.com/privkey.pem&quot;
+              <span style=color:#f92672>&#34;certificateFile&#34;</span>: <span style=color:#e6db74>&#34;/etc/letsencrypt/live/example.com/fullchain.pem&#34;</span>,
+              <span style=color:#f92672>&#34;keyFile&#34;</span>: <span style=color:#e6db74>&#34;/etc/letsencrypt/live/example.com/privkey.pem&#34;</span>
             }
           ]
         }
       }
     }
   ],
-  &quot;outbounds&quot;: [
+  <span style=color:#f92672>&#34;outbounds&#34;</span>: [
     {
-      &quot;protocol&quot;: &quot;freedom&quot;,
-      &quot;settings&quot;: {}
+      <span style=color:#f92672>&#34;protocol&#34;</span>: <span style=color:#e6db74>&#34;freedom&#34;</span>,
+      <span style=color:#f92672>&#34;settings&#34;</span>: {}
     }
   ]
 }
-</code></pre><p>拉取 <code>v2fly/v2fly-core</code> 镜像并启动容器（需要自行修改挂载的 SSL 证书路径）。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --name v2fly-core <span style=color:#ae81ff>\
+</code></pre></div><p>拉取 <code>v2fly/v2fly-core</code> 镜像并启动容器（需要自行修改挂载的 SSL 证书路径）。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --name v2fly-core <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>    --restart always <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>    -p 443:443/tcp <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>    -v /opt/v2fly-core/config.json:/etc/v2ray/config.json:ro <span style=color:#ae81ff>\
@@ -170,6 +170,6 @@ sudo nano /opt/v2fly-core/config.json
 </code></pre></div><h3 id=添加-a-记录>添加 A 记录
 <a class=anchor href=#%e6%b7%bb%e5%8a%a0-a-%e8%ae%b0%e5%bd%95>#</a></h3><p>在域名的 DNS 记录中添加 A 记录，名称为 <code>proxy</code> 或自定义其他名称。DNS 记录内容为服务器 IP 地址。添加完成后，<code>proxy.example.com</code> 就是 V2Ray 服务器地址。</p><h3 id=测试代理>测试代理
 <a class=anchor href=#%e6%b5%8b%e8%af%95%e4%bb%a3%e7%90%86>#</a></h3><p>将配置填入任意代理客户端并连接到代理服务器，使用浏览器打开
-<a href=https://scholar.google.com>Google 学术</a>，无论是正常访问还是 403 错误（Google 学术屏蔽了部分 IP 段）都说明部署成功。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/kallydev/kallydev.github.io/commit/abf94fba58efe3a4fcfbb307fd1e76f113031fe3 title="最后修改者 kallydev | April 20, 2021" target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
+<a href=https://scholar.google.com>Google 学术</a>，无论是正常访问还是 403 错误（Google 学术屏蔽了部分 IP 段）都说明部署成功。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/kallydev/kallydev.github.io/commit/c55f0fce6c630635c4e31e91b5c330a8ba6ede23 title="最后修改者 kallydev | April 20, 2021" target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
 <span>April 20, 2021</span></a></div><div><a class="flex align-center" href=https://github.com/kallydev/kallydev.github.io/edit/main/content.zh/docs/technical-notes/server/deploy-v2ray-with-docker.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
 <span>编辑本页</span></a></div></div></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div></main></body></html>
