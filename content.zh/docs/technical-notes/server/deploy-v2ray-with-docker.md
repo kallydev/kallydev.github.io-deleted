@@ -3,8 +3,6 @@ weight: 1
 title: "使用 Docker 部署 V2Ray"
 ---
 
-# 使用 Docker 部署 V2Ray
-
 ## 部署环境
 
 仅用于参考，并非硬性要求，需按照实际情况自行更改。
@@ -162,7 +160,11 @@ EFF news, campaigns, and ways to support digital freedom.
 (Y)es/(N)o: 
 ```
 
-**最关键的一步**，创建 DNS 记录类型为 TXT，名称为 `_acme-challenge`，值为所要求的字符串，参考`4HXdvgYOlOoiWc3ktriAxrnX1fLvljl1QpzfCWeANoI`。
+**最关键的一步**，创建 DNS 记录类型为 TXT，名称为 `_acme-challenge`。值为所要求的字符串，参考：
+
+```
+4HXdvgYOlOoiWc3ktriAxrnX1fLvljl1QpzfCWeANoI
+```
 
 ```
 Please deploy a DNS TXT record under the name
