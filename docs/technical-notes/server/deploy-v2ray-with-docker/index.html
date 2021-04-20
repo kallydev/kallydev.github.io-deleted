@@ -1,0 +1,175 @@
+<!doctype html><html lang=zh dir=ltr><head><meta name=generator content="Hugo 0.82.0"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="使用 Docker 部署 V2Ray #  部署环境 #  仅用于参考，并非硬性要求，需按照实际情况自行更改。
+ 服务器为腾讯云轻量应用服务器（香港或新加坡）； 服务器操作系统为 Ubuntu 20.04 LTS； 系统默认用户 ubuntu，非默认用户 zhangsan； 服务器 IP 为 42.42.42.42； 在海外服务商购买的域名（例如 GoDaddy、Google Domain）；  部署步骤 #  配置服务器 #   卸载腾讯云监控组件（非腾讯云轻量应用服务器请略过）。  sudo /usr/local/qcloud/stargate/admin/uninstall.sh sudo /usr/local/qcloud/YunJing/uninst.sh sudo /usr/local/qcloud/monitor/barad/admin/uninstall.sh 创建新的用户 zhangsan 并修改密码。  sudo useradd -s /bin/bash -d /home/zhangsan -m zhangsan sudo passwd zhangsan 配置 zhangsan 允许使用 sudo 命令。  sudo visudo 在文件最末尾找到以下内容：
+#includedir /etc/sudoers.d lighthouse ALL=(ALL) NOPASSWD: ALL ubuntu ALL=(ALL:ALL) NOPASSWD: ALL 将以上内容修改为以下内容："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="使用 Docker 部署 V2Ray"><meta property="og:description" content="使用 Docker 部署 V2Ray #  部署环境 #  仅用于参考，并非硬性要求，需按照实际情况自行更改。
+ 服务器为腾讯云轻量应用服务器（香港或新加坡）； 服务器操作系统为 Ubuntu 20.04 LTS； 系统默认用户 ubuntu，非默认用户 zhangsan； 服务器 IP 为 42.42.42.42； 在海外服务商购买的域名（例如 GoDaddy、Google Domain）；  部署步骤 #  配置服务器 #   卸载腾讯云监控组件（非腾讯云轻量应用服务器请略过）。  sudo /usr/local/qcloud/stargate/admin/uninstall.sh sudo /usr/local/qcloud/YunJing/uninst.sh sudo /usr/local/qcloud/monitor/barad/admin/uninstall.sh 创建新的用户 zhangsan 并修改密码。  sudo useradd -s /bin/bash -d /home/zhangsan -m zhangsan sudo passwd zhangsan 配置 zhangsan 允许使用 sudo 命令。  sudo visudo 在文件最末尾找到以下内容：
+#includedir /etc/sudoers.d lighthouse ALL=(ALL) NOPASSWD: ALL ubuntu ALL=(ALL:ALL) NOPASSWD: ALL 将以上内容修改为以下内容："><meta property="og:type" content="article"><meta property="og:url" content="https://blog.kallydev.com/docs/technical-notes/server/deploy-v2ray-with-docker/"><meta property="article:section" content="docs"><meta property="article:modified_time" content="2021-04-20T21:28:20+08:00"><title>使用 Docker 部署 V2Ray | Kally's Blog</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.2bc2364a4a4b31f0ec1debecf0a8f90a840821f143dfe1ac6a0f7cbcbdcf64ac.css integrity="sha256-K8I2SkpLMfDsHevs8Kj5CoQIIfFD3+Gsag98vL3PZKw="><script defer src=/zh.search.min.ded5b81696252ea84027ffb4b2fb5f767c2bb1bb8e9450dd6ceae4a62cee3d58.js integrity="sha256-3tW4FpYlLqhAJ/+0svtfdnwrsbuOlFDdbOrkpizuPVg="></script><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-138254822-2','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a href=/><img src=https://proxy.kallydev.com/avatar/a40ee0036c23ff2c13fca74683109b4b alt=Logo><span>Kally's Blog</span></a></h2><div class=book-search><input type=text id=book-search-input placeholder=搜索 aria-label=搜索 maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><ul><li class=book-section-flat><a href=https://blog.kallydev.com/docs/study-notes/>学习笔记</a><ul><li><input type=checkbox id=section-853e7926f01d4450a9d99e1b3c4932e6 class=toggle>
+<label for=section-853e7926f01d4450a9d99e1b3c4932e6 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/further-mathematics/>高等数学</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-93578c9c4d2e36fc172ee1cad7e200e1 class=toggle>
+<label for=section-93578c9c4d2e36fc172ee1cad7e200e1 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/further-mathematics/function-and-limit/>函数与极限</a>
+<span>▾</span></label><ul></ul></li></ul></li><li><input type=checkbox id=section-c31ff70dad24116e30f448d51d3c8420 class=toggle>
+<label for=section-c31ff70dad24116e30f448d51d3c8420 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/linear-algebra/>线性代数</a>
+<span>▾</span></label><ul></ul></li><li><input type=checkbox id=section-d45dbf95cbc4f05011b6cffdba5dbe64 class=toggle>
+<label for=section-d45dbf95cbc4f05011b6cffdba5dbe64 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/probability-and-mathematical-statistics/>概率论与数理统计</a>
+<span>▾</span></label><ul></ul></li><li><input type=checkbox id=section-e9b54c285f78a749361b2c19202939a4 class=toggle>
+<label for=section-e9b54c285f78a749361b2c19202939a4 class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/college-english-test/>大学英语</a>
+<span>▾</span></label><ul></ul></li><li><input type=checkbox id=section-cdf2d303aaf71a5dbf6edb36bc94dacd class=toggle>
+<label for=section-cdf2d303aaf71a5dbf6edb36bc94dacd class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/japanese-language-proficiency-test/>日本语</a>
+<span>▾</span></label><ul></ul></li><li><input type=checkbox id=section-614d599a84491b7707bbfeb77900ddbb class=toggle>
+<label for=section-614d599a84491b7707bbfeb77900ddbb class="flex justify-between"><a href=https://blog.kallydev.com/docs/study-notes/computer-basics/>计算机基础</a>
+<span>▾</span></label><ul></ul></li></ul></li><li class=book-section-flat><a href=https://blog.kallydev.com/docs/technical-notes/>折腾笔记</a><ul><li><input type=checkbox id=section-8707e24d3da18c5d28e0652a73fb2bca class=toggle checked>
+<label for=section-8707e24d3da18c5d28e0652a73fb2bca class="flex justify-between"><a href=https://blog.kallydev.com/docs/technical-notes/server/>服务器</a>
+<span>▾</span></label><ul><li><a href=https://blog.kallydev.com/docs/technical-notes/server/deploy-v2ray-with-docker/ class=active>使用 Docker 部署 V2Ray</a></li></ul></li></ul></li><li class=book-section-flat><a href=https://blog.kallydev.com/docs/algorithms-and-data-structures/>算法与数据结构</a><ul></ul></li><li class=book-section-flat><a href=https://blog.kallydev.com/docs/design-pattern/>设计模式</a><ul></ul></li></ul><ul><li><a href=/posts/>博客</a></li><li><a href=https://github.com/kallydev target=_blank rel=noopener>GitHub</a></li></ul></nav><script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>使用 Docker 部署 V2Ray</strong>
+<label for=toc-control></label></div></header><article class=markdown><h1 id=使用-docker-部署-v2ray>使用 Docker 部署 V2Ray
+<a class=anchor href=#%e4%bd%bf%e7%94%a8-docker-%e9%83%a8%e7%bd%b2-v2ray>#</a></h1><h2 id=部署环境>部署环境
+<a class=anchor href=#%e9%83%a8%e7%bd%b2%e7%8e%af%e5%a2%83>#</a></h2><p>仅用于参考，并非硬性要求，需按照实际情况自行更改。</p><ol><li>服务器为腾讯云轻量应用服务器（香港或新加坡）；</li><li>服务器操作系统为 Ubuntu 20.04 LTS；</li><li>系统默认用户 ubuntu，非默认用户 zhangsan；</li><li>服务器 IP 为 42.42.42.42；</li><li>在海外服务商购买的域名（例如 GoDaddy、Google Domain）；</li></ol><h2 id=部署步骤>部署步骤
+<a class=anchor href=#%e9%83%a8%e7%bd%b2%e6%ad%a5%e9%aa%a4>#</a></h2><h3 id=配置服务器>配置服务器
+<a class=anchor href=#%e9%85%8d%e7%bd%ae%e6%9c%8d%e5%8a%a1%e5%99%a8>#</a></h3><ol><li>卸载腾讯云监控组件（非腾讯云轻量应用服务器请略过）。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo /usr/local/qcloud/stargate/admin/uninstall.sh
+sudo /usr/local/qcloud/YunJing/uninst.sh
+sudo /usr/local/qcloud/monitor/barad/admin/uninstall.sh
+</code></pre></div><ol start=2><li>创建新的用户 zhangsan 并修改密码。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo useradd -s /bin/bash -d /home/zhangsan -m zhangsan
+sudo passwd zhangsan
+</code></pre></div><ol start=3><li>配置 zhangsan 允许使用 sudo 命令。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo visudo
+</code></pre></div><p>在文件最末尾找到以下内容：</p><pre><code>#includedir /etc/sudoers.d
+lighthouse ALL=(ALL) NOPASSWD: ALL
+ubuntu  ALL=(ALL:ALL) NOPASSWD: ALL
+</code></pre><p>将以上内容修改为以下内容：</p><pre><code>#includedir /etc/sudoers.d
+zhangsan ALL=(ALL) NOPASSWD: ALL
+</code></pre><p>修改后 Ctrl + O 写入，按 Enter 确定, 最后 Ctrl + X 退出。</p><ol start=4><li>修改镜像源。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo nano /etc/apt/sources.list
+</code></pre></div><p>把 <code>sources.list</code> 内所有内容删除后，粘贴以下内容并保存。</p><pre><code># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+
+# 预发布软件源，不建议启用
+# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+</code></pre><p>更新并升级所有软件包。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo apt update
+sudo apt upgrade -y
+</code></pre></div><p>由于软件包比较多，需等待一段时间，期间会多次出现大致以下格式的选项，全部 Y 然后 Enter。</p><pre><code>Configuration file '/etc/cloud/cloud.cfg'
+ ==&gt; Modified (by you or by a script) since installation.
+ ==&gt; Package distributor has shipped an updated version.
+   What would you like to do about it ?  Your options are:
+    Y or I  : install the package maintainer's version
+    N or O  : keep your currently-installed version
+      D     : show the differences between the versions
+      Z     : start a shell to examine the situation
+ The default action is to keep your current version.
+*** cloud.cfg (Y/I/N/O/D/Z) [default=N] ? 
+</code></pre><ol start=5><li>删除默认用户。</li></ol><p>重启服务器以便断开所有 seesion。</p><pre><code>sudo reboot
+</code></pre><p>重新连接到服务器后，删除默认用户和腾讯云轻量应用服务器默认用户。</p><pre><code>sudo userdel -r ubuntu
+sudo userdel -r lighthouse
+</code></pre><h3 id=申请-ssl-证书>申请 SSL 证书
+<a class=anchor href=#%e7%94%b3%e8%af%b7-ssl-%e8%af%81%e4%b9%a6>#</a></h3><ol><li>安装 snapd 和 certbot。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo apt install -y snapd
+sudo snap install --classic certbot
+</code></pre></div><ol start=2><li>使用 DNS 验证域名的方式申请证书。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo certbot certonly -d *.example.com --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory
+</code></pre></div><p>输入邮箱以便接收紧急更新以及安全通知邮件，输入后按 Enter 键。</p><pre><code>Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator manual, Installer None
+Enter email address (used for urgent renewal and security notices)
+ (Enter 'c' to cancel): 
+</code></pre><p>输入 Y 按 Enter 键，同意相关服务协议。</p><pre><code>Please read the Terms of Service at
+https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf. You must
+agree in order to register with the ACME server. Do you agree?
+(Y)es/(N)o: 
+</code></pre><p>输入 Y 按 Enter 键，同意接收新闻邮件。</p><pre><code>Would you be willing, once your first certificate is successfully issued, to
+share your email address with the Electronic Frontier Foundation, a founding
+partner of the Let's Encrypt project and the non-profit organization that
+develops Certbot? We'd like to send you email about our work encrypting the web,
+EFF news, campaigns, and ways to support digital freedom.
+(Y)es/(N)o: 
+</code></pre><p><strong>最关键的一步</strong>，创建 DNS 记录类型为 TXT，名称为 <code>_acme-challenge</code>，值为所要求的字符串，参考<code>4HXdvgYOlOoiWc3ktriAxrnX1fLvljl1QpzfCWeANoI</code>。</p><pre><code>Please deploy a DNS TXT record under the name
+_acme-challenge.example.com with the following value:
+
+4HXdvgYOlOoiWc3ktriAxrnX1fLvljl1QpzfCWeANoI
+
+Before continuing, verify the record is deployed.
+Press Enter to Continue
+</code></pre><p><strong>等待几分钟 DNS 刷新</strong>，按 Enter 键后为以下内容以为申请成功。</p><pre><code>Waiting for verification...
+Cleaning up challenges
+Subscribe to the EFF mailing list (email: example@email.com).
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/example.com/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/example.com/privkey.pem
+   Your certificate will expire on 2021-07-19. To obtain a new or
+   tweaked version of this certificate in the future, simply run
+   certbot again. To non-interactively renew *all* of your
+   certificates, run &quot;certbot renew&quot;
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+</code></pre><h3 id=安装-docker>安装 Docker
+<a class=anchor href=#%e5%ae%89%e8%a3%85-docker>#</a></h3><ol><li>安装所需依赖。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+</code></pre></div><ol start=2><li>添加 Docker GPG 公钥。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>   <span style=color:#e6db74>&#34;deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
+</span><span style=color:#e6db74>   </span><span style=color:#66d9ef>$(</span>lsb_release -cs<span style=color:#66d9ef>)</span><span style=color:#e6db74> \
+</span><span style=color:#e6db74>   stable&#34;</span>
+</code></pre></div><ol start=3><li>更新软件包并安装 Docker CE。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo apt-get update
+sudo apt-get install -y docker-ce
+</code></pre></div><ol start=4><li>将当前用户添加到 <code>docker</code> 用户组，需重新连接 ssh 才会生效。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo usermod -aG docker $USER
+exit
+</code></pre></div><h3 id=启用-bbr-拥塞控制算法>启用 BBR 拥塞控制算法
+<a class=anchor href=#%e5%90%af%e7%94%a8-bbr-%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e7%ae%97%e6%b3%95>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo echo <span style=color:#e6db74>&#34;net.core.default_qdisc=fq&#34;</span> &gt;&gt;/etc/sysctl.conf
+sudo echo <span style=color:#e6db74>&#34;net.ipv4.tcp_congestion_control=bbr&#34;</span> &gt;&gt;/etc/sysctl.conf
+sudo sysctl -p
+sudo sysctl net.ipv4.tcp_available_congestion_control
+</code></pre></div><h3 id=编辑-v2ray-服务端配置>编辑 v2ray 服务端配置
+<a class=anchor href=#%e7%bc%96%e8%be%91-v2ray-%e6%9c%8d%e5%8a%a1%e7%ab%af%e9%85%8d%e7%bd%ae>#</a></h3><ol><li>创建目录以及 <code>config.json</code> 文件。</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo mkdir -p /opt/v2fly-core
+sudo nano /opt/v2fly-core/config.json
+</code></pre></div><p>把以下配置粘贴到 <code>config.json</code> 文件内（自行修改 UUID）。</p><pre><code>{
+  &quot;inbounds&quot;: [
+    {
+      &quot;port&quot;: 443,
+      &quot;protocol&quot;: &quot;vmess&quot;,
+      &quot;settings&quot;: {
+        &quot;clients&quot;: [
+          {
+            &quot;id&quot;: &quot;3DD78345-27F8-4B14-8C6E-7856A6C4FB8D&quot;,
+            &quot;alterId&quot;: 0
+          }
+        ]
+      },
+      &quot;streamSettings&quot;: {
+        &quot;network&quot;: &quot;tcp&quot;,
+        &quot;security&quot;: &quot;tls&quot;,
+        &quot;tlsSettings&quot;: {
+          &quot;certificates&quot;: [
+            {
+              &quot;certificateFile&quot;: &quot;/etc/letsencrypt/live/example.com/fullchain.pem&quot;,
+              &quot;keyFile&quot;: &quot;/etc/letsencrypt/live/example.com/privkey.pem&quot;
+            }
+          ]
+        }
+      }
+    }
+  ],
+  &quot;outbounds&quot;: [
+    {
+      &quot;protocol&quot;: &quot;freedom&quot;,
+      &quot;settings&quot;: {}
+    }
+  ]
+}
+</code></pre><p>拉取 <code>v2fly/v2fly-core</code> 镜像并启动容器（需要自行修改挂载的 SSL 证书路径）。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --name v2fly-core <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --restart always <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -p 443:443/tcp <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v /opt/v2fly-core/config.json:/etc/v2ray/config.json:ro <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v /etc/letsencrypt/live/example.com:/etc/letsencrypt/live/example.com:ro <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v /etc/letsencrypt/archive/example.com:/etc/letsencrypt/archive/example.com:ro <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -dit v2fly/v2fly-core:latest
+</code></pre></div><h3 id=添加-a-记录>添加 A 记录
+<a class=anchor href=#%e6%b7%bb%e5%8a%a0-a-%e8%ae%b0%e5%bd%95>#</a></h3><p>在域名的 DNS 记录中添加 A 记录，名称为 <code>proxy</code> 或自定义其他名称。DNS 记录内容为服务器 IP 地址。添加完成后，<code>proxy.example.com</code> 就是 V2Ray 服务器地址。</p><h3 id=测试代理>测试代理
+<a class=anchor href=#%e6%b5%8b%e8%af%95%e4%bb%a3%e7%90%86>#</a></h3><p>将配置填入任意代理客户端并连接到代理服务器，使用浏览器打开
+<a href=https://scholar.google.com>Google 学术</a>，无论是正常访问还是 403 错误（Google 学术屏蔽了部分 IP 段）都说明部署成功。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/kallydev/kallydev.github.io/commit/abf94fba58efe3a4fcfbb307fd1e76f113031fe3 title="最后修改者 kallydev | April 20, 2021" target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
+<span>April 20, 2021</span></a></div><div><a class="flex align-center" href=https://github.com/kallydev/kallydev.github.io/edit/main/content.zh/docs/technical-notes/server/deploy-v2ray-with-docker.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div></div></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div></main></body></html>
