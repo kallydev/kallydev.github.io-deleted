@@ -1,7 +1,5 @@
 ---
 weight: 1
-bookFlatSection: true
+bookCollapseSection: true
 title: "折腾笔记"
 ---
-
-# 折腾笔记
